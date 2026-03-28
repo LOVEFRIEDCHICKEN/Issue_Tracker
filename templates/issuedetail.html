@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ issue.issue_title }}</h1>
+<p><strong>Project:</strong> {{ issue.project }}</p>
+<p><strong>Description:</strong> {{ issue.issue_description }}</p>
+<p><strong>Priority:</strong> {{ issue.priority }}</p>
+<p><strong>Fatality:</strong> {{ issue.fatality }}</p>
+<p><strong>Status:</strong> {{ issue.issue_status }}</p>
+<p><strong>Reporter:</strong> {{ issue.reporter }}</p>
+{% if current_user.is_authenticated %}
+<form method="POST" action="{{ url_for('issues.update_status', issue_id=issue.id) }}">
+<select name="status">
+<option value="Open">Open</option><option value="Closed">Closed</option>
+</select>
+<button>Update</button>
+</form>
+<a href="{{ url_for('issues.delete', issue_id=issue.id) }}">Delete</a>
+{% endif %}
+{% endblock %}

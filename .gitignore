@@ -1,0 +1,32 @@
+# env
+.env
+
+# virtual environment
+.venv/
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.py[cod]
+*.pyo
+
+# Pycharm Project Setting
+.idea/
+
+# Database file
+*.db
+*.sqlite3
+
+# log file
+*.log
+
+# extra
+dist/
+build/
+*.egg-info/
+
+
+# Include
+!.env.example

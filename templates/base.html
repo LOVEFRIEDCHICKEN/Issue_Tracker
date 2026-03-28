@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Issue Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
+</head>
+<body>
+<nav>
+    <a href = "{{ url_for('health_check') }}">Home</a> <!-- before main.index -->
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('issues.list') }}">Issue List</a>
+    <a href="{{ url_for('auth.logout') }}">Log Out</a>
+    {% else %}
+    <a href="{{ url_for('auth.login') }}">Log In</a>
+    <a href="{{ url_for('auth.user_register') }}">Sign Up</a>
+    {% endif %}
+</nav>
+{% block content %}{% endblock %}
+</body>
+</html>
