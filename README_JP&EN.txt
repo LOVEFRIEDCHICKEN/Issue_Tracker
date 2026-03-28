@@ -80,8 +80,21 @@ Flask_Project/
    SECRET_KEY の生成方法：
    python -c "import os; print(repr(os.urandom(24)))"
 
+   次に .env ファイルのバリューを自分の環境に合わせて修正
+   SECRET_KEY=your-key
+
+   MYSQL_HOST=localhost_or_hostname
+   MYSQL_USER=root_or_username
+   MYSQL_PASSWORD=your_mysql_password
+   MYSQL_DATABASE=your_db_name
+
 5. MySQL データベースの作成
    CREATE DATABASE flask_issue_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+   cmdから 下の コマンド実行
+   1. cd (ダウンロードした経路)
+      ※ ex) cd C:\Users\(username)\PycharmProjects\Issue_Tracker
+   2. mysql -u (username) -p flask_issue_db < schema.sql
 
 [EN]
 1. Clone the repository
@@ -104,8 +117,21 @@ Flask_Project/
    To generate a SECRET_KEY:
    python -c "import os; print(repr(os.urandom(24)))"
 
+   Then need to fix .env file's detail value on your environment
+   SECRET_KEY=your-key
+
+   MYSQL_HOST=localhost_or_hostname
+   MYSQL_USER=root_or_username
+   MYSQL_PASSWORD=your_mysql_password
+   MYSQL_DATABASE=your_db_name
+
 5. Create the MySQL database
    CREATE DATABASE flask_issue_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+   From cmd window
+   1. cd (download folder address)
+      ※ ex) cd C:\Users\(username)\PycharmProjects\Issue_Tracker
+   2. mysql -u (username) -p flask_issue_db < schema.sql
 
 
 ■ 実行方法 / How to Run

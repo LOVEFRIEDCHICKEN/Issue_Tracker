@@ -61,9 +61,23 @@ Flask_Project/
    SECRET_KEY=랜덤키 (아래 명령어로 생성 가능)
    python -c "import os; print(repr(os.urandom(24)))"
 
+   그 후 .env 파일의 상세 값을 자신의 환경에 맞게 수정
+   SECRET_KEY=your-key
+
+   MYSQL_HOST=localhost_or_hostname
+   MYSQL_USER=root_or_username
+   MYSQL_PASSWORD=your_mysql_password
+   MYSQL_DATABASE=your_db_name
+
+
 5. MySQL 데이터베이스 생성
    MySQL에서 아래 명령어를 실행합니다.
    CREATE DATABASE flask_issue_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+   cmd창에서 아래 명령어 실행
+   1. cd (다운로드 받은 폴더 경로) 
+      ※ ex) cd C:\Users\(username)\PycharmProjects\Issue_Tracker
+   2. mysql -u root -p flask_issue_db < schema.sql
 
 
 ■ 실행 방법
