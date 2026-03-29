@@ -63,6 +63,7 @@ class DatabaseManager:
                     return cursor.rowcount
         except Error as e:
             print(f"Error: {e}")
+            return None
         finally:
             if cursor:
                 cursor.close()

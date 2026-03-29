@@ -24,7 +24,8 @@ def create_issue():
 
 
 @issue_bp.route('/', methods = ['GET']) # connect and get from api/issues
-def get_issues():
+def get_issues(): # This will work differently with issue_list_page, better to leave it here.
+    # For external tool, it can call json data later.
     """show all issues list API"""
     issues = service.get_all_issues()
     return jsonify(issues)
@@ -33,7 +34,7 @@ def get_issues():
 @issue_bp.route('/list', methods = ['GET'])
 @login_required
 def issue_list_page():
-    """Issue List Page"""
+    """For HTML Issue List Page Render"""
     issues = service.get_all_issues()
     return render_template('issues.html', issues = issues)
 

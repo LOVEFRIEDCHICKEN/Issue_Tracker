@@ -20,7 +20,7 @@ class IssueService:
             reporter=issue_data.get('reporter', 'anonymous')
         )
         sql = """
-        INSERT INTO issue_list (project, issue_title, issue_description, priority, fatality, version, reporter)
+        INSERT INTO issue_list (project, issue_title, issue_description, priority, fatality, version, issue_status, reporter)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
 
@@ -74,12 +74,15 @@ class IssueService:
 
     # Delete Issue
     def delete_issue(self, issue_id: int) -> bool:
-        """Delete issue by id"""
+        """Delete issue by issue id"""
         sql = """
         DELETE FROM issue_list
         WHERE id = %s
         """
         # need caution. use delete very carefully.
+        result = self.db_manager.execute_query(sql, (issue_id))
+        # it will check status first then id, so need to put status first in result
+        return result > 0
 
 
     def search_issue(self, keyword: str) -> List[dict]:
@@ -91,13 +94,13 @@ class IssueService:
         FROM issue_list
         WHERE issue_title LIKE %s OR issue_description LIKE %s OR priority LIKE %s or fatality LIKE %s or issue_status LIKE %s OR reporter LIKE %s
         """
-        params = (f"%(keyword)",) * 6  # 6 cases above, check 6 times
+        params = (f"%(keyword)%",) * 6  # 6 cases above, check 6 times
         results = self.db_manager.execute_query(sql, params, fetch=True)
         return [self.row_to_dict(row) for row in results]
         # same as for row in results
 
 
-    def row_to_dict(self, row: tuple) -> dict:
+    def row_to_dict(self, row: tuple) -> dict: # This works differently with row_to_dict in user_service.py
         """change row to tuple"""
         return {
             'id': row[0], 'project': row[1], 'issue_title': row[2],

@@ -11,6 +11,7 @@ class UserService:
 
 
     def row_to_dict(self, row: tuple, columns: list) -> dict:
+        # This works differently with row_to_dict in issue_service.py
         """Convert tuple row to dic with use column names"""
         return dict(zip(columns, row))
 
@@ -25,7 +26,7 @@ class UserService:
 
         password_hash = generate_password_hash(plain_password) # for security, need to hashing the password
 
-        user = UserInfo( # create dataclass, same as Issue Service
+        user = UserInfo( # create dataclass, same as Issue Service, bring it from users.py
             username = username,
             nickname = nickname,
             password_hash = password_hash # hashed value
@@ -36,7 +37,7 @@ class UserService:
         VALUES (%s, %s, %s) 
         """
 
-        params = (
+        params = ( # bring data from user above. made by UserInfo class.
             user.username, user.nickname, user.password_hash
         )
         return self.db_manager.execute_query(sql, params) # will return user id
@@ -48,13 +49,13 @@ class UserService:
         sql = """
         SELECT id, username, nickname
         FROM users
-        WHERE id = %s
+        WHERE id = %s AND is_deleted = FALSE
         """
         results = self.db_manager.execute_query(sql, (user_id,), fetch=True)
         if not results:
             return None
-        columns = ['id', 'username', 'nickname', 'password_hash']
-        return self.row_to_dict(results[0], columns) if results else None
+        row = results[0]
+        return UserInfo(id = row[0], username = row[1], nickname = row[2]) if results else None
         # this def will have only one tuple as result
 
 
@@ -63,22 +64,35 @@ class UserService:
         sql = """
         SELECT id, username, nickname
         FROM users
-        WHERE username = %s
+        WHERE username = %s AND is_deleted = FALSE
         """
         results = self.db_manager.execute_query(sql, (username,), fetch=True)
         if not results:
             return None
-        columns = ['id', 'username', 'nickname', 'password_hash']
+        columns = ['id', 'username', 'nickname']
         return self.row_to_dict(results[0], columns) if results else None
         # this def will have only one tuple as result
 
-# need to be careful and need to check if this is a right way to delete
-    def delete_user_by_id(self, user_id: int) -> Optional[dict]:
-        """DELETE user by id"""
+
+    def get_user_with_password(self, username: str) -> Optional[dict]:
         sql = """
-        DELETE FROM users
-        WHERE id = %s
+        SELECT id, username, nickname, password_hash
+        FROM users
+        WHERE username = %s
         """
-        results = self.db_manager.execute_query(sql, (user_id,), fetch=True)
-        return results > 0
-        # this def will have only one tuple as result
+        results = self.db_manager.execute_query(sql, (username,), fetch=True)
+        if not results:
+            return None # Add defense code
+        columns = ['id', 'username', 'nickname', 'password_hash']
+        return self.row_to_dict(results[0], columns)
+
+
+    def deactivate_user(self, user_id: int) -> bool:
+        """Soft Delete of user account"""
+        sql = """
+        UPDATE users
+        SET username = '', password_hash = '', is_deleted = TRUE, deleted_at = NOW()
+        WHERE id = %s AND is_deleted = FALSE
+        """
+        result = self.db_manager.execute_query(sql, (user_id,))
+        return result > 0

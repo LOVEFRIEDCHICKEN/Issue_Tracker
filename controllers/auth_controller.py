@@ -30,7 +30,7 @@ def user_register():
             flash('Already Exist username')
             return redirect(url_for('auth.user_register')) # before = auth.register
 
-        user_data = {'username': username, 'nickname': nickname, 'password_hash': password}
+        user_data = {'username': username, 'nickname': nickname, 'password': password}
         service.create_user(user_data)
         flash('Sign up complete')
         return redirect(url_for('auth.login'))
@@ -43,28 +43,18 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if not username and password:
+        if not username or not password:
             flash('Enter the ID and Password')
             return render_template('login.html')
 
-        user = service.get_user_by_username(username)
+        user = service.get_user_with_password(username) # need password for login
         if user and check_password_hash(user['password_hash'], request.form['password']):
-            login_user(UserInfo(id=user['id'], username = user['username'], password_hash = ''))
-            return redirect(url_for('issues.list')) # if there is landing page, need to change url here
+            login_user(UserInfo(id=user['id'], username = user['username'], nickname = user['nickname']))
+            return redirect(url_for('issue.issue_list_page')) # if there is landing page, need to change url here
         flash('Failed to login')
         return render_template('login.html')
 
     return render_template('login.html')
-
-
-@auth_bp.route('/delete', methods = ['POST'])
-@login_required
-def delete():
-    """delete account"""
-    service.delete_user_by_id(current_user.id)
-    logout_user()
-    flash('Delete Account Completed')
-    return redirect(url_for('health_check')) # to main page # before = main.index
 
 
 @auth_bp.route('/logout')
@@ -85,17 +75,18 @@ def delete_account_page():
 def delete_account():
     """Check Password and Soft Delete"""
     password = request.form.get('Password') # need to check if this name is right or not
-    user = service.get_user_by_username(current_user.username)
+    user = service.get_user_with_password(current_user.username)
 
     if not user or not check_password_hash(user['password_hash'], password):
         flash('Incorrect Password')
         return redirect(url_for('auth.delete_account_page')) # is this really right name?? need to check
 
-    success = service.delete_user_by_id(current_user.id) # need to make other def and need to change here
+    success = service.deactivate_user(current_user.id) # # from user_service.py
     if not success:
         flash('There is an error for delete account')
         return redirect(url_for('auth.delete_account_page'))
 
-    logout_user()
-    flash('Delete complete')
-    return redirect(url_for('health_check')) # if I change landing page, need to change here
+    if success:
+        logout_user() # immediate session exit
+        flash('Account Deleted')
+        return redirect(url_for('health_check')) # if I change landing page, need to change here

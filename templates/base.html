@@ -25,17 +25,18 @@
     </style>
 </head>
 <body>
+
 <!-- Top Header: Click the Issue Tracker then go to Landing Page -->
 <header>
     <h1>
         <a href="{{ url_for('health_check') }}">Issue Tracker</a>
     </h1>
 
-<!-- Top right  -->
+    <!-- Top right  -->
     <div>
         {% if current_user.is_authenticated %}
-            <span>{{ current_user.name }}</span>
-            <a href="{{ url_for('issues.list') }}">Issue List</a>
+            <span>{{ current_user.nickname }}</span>
+            <a href="{{ url_for('issue.issue_list_page') }}">Issue List</a>
             <a href="{{ url_for('auth.logout') }}">Log Out</a>
             <a href="{{ url_for('auth.delete_account_page') }}">Delete Account</a>
         {% else %}
@@ -72,6 +73,5 @@
 
 </div>
 
-{% block content %}{% endblock %}
 </body>
 </html>

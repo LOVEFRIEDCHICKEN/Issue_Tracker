@@ -3,15 +3,15 @@
 <h2>Delete Account</h2>
 <p>Do you really want to delete account? This cannot be undone.</p>
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+<!--{% with messages = get_flashed_messages() %}-->
+<!--  {% if messages %}-->
+<!--    <ul>-->
+<!--      {% for message in messages %}-->
+<!--        <li>{{ message }}</li>-->
+<!--      {% endfor %}-->
+<!--    </ul>-->
+<!--  {% endif %}-->
+<!--{% endwith %}-->
 
 <form method="POST" action="{{ url_for('auth.delete_account') }}">
       <p>Enter your Password for confirm</p>

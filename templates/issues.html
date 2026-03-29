@@ -12,7 +12,7 @@
 <hr>
 
 <!-- Issue List Table -->
-{% If issues %}
+{% if issues %}
 <table border="1"> <!-- need this for able to see a border without scc-->
     <thead>
         <tr>
@@ -27,7 +27,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for issue in issues %}
+        {% for issue in issues %} <!-- Bring issue from issue_list_page(): in issue_controller.py -->
         <tr>
             <td>{{ issue.id }}</td>
             <td>{{ issue.project }}</td>

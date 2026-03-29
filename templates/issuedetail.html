@@ -8,12 +8,12 @@
 <p><strong>Status:</strong> {{ issue.issue_status }}</p>
 <p><strong>Reporter:</strong> {{ issue.reporter }}</p>
 {% if current_user.is_authenticated %}
-<form method="POST" action="{{ url_for('issues.update_status', issue_id=issue.id) }}">
+<form method="POST" action="{{ url_for('issue.update_status', issue_id=issue.id) }}">
 <select name="status">
 <option value="Open">Open</option><option value="Closed">Closed</option>
 </select>
 <button>Update</button>
 </form>
-<a href="{{ url_for('issues.delete', issue_id=issue.id) }}">Delete</a>
+<a href="{{ url_for('issue.delete', issue_id=issue.id) }}">Delete</a>
 {% endif %}
 {% endblock %}
