@@ -98,7 +98,7 @@ Flask_Project/
 
 [EN]
 1. Clone the repository
-   git clone https://github.com/{username}/Flask_Project.git
+   git clone https://github.com/LOVEFRIEDCHICKEN/Issue_Tracker.git
    cd Flask_Project
 
 2. Create and activate a virtual environment

@@ -1,5 +1,5 @@
 from datetime import timedelta
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from config import Config
 from controllers.auth_controller import login_manager, auth_bp
@@ -28,7 +28,8 @@ def create_app():
 
     @flask_app.route('/')
     def health_check():
-        return {'Message': 'Issue Tracker API is on running', 'version': '1.0.0'}
+        return render_template('index.html')
+        # return {'Message': 'Issue Tracker API is on running', 'version': '1.0.0'}
 
     return flask_app
 

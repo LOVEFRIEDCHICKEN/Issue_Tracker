@@ -9,6 +9,12 @@ class UserService:
     def __init__(self, config: Config):
         self.db_manager = DatabaseManager(config)
 
+
+    def row_to_dict(self, row: tuple, columns: list) -> dict:
+        """Convert tuple row to dic with use column names"""
+        return dict(zip(columns, row))
+
+
     def create_user(self, user_data: dict) -> int:
         """Create user and return user id as int type."""
         username = user_data.get('username')
@@ -37,35 +43,42 @@ class UserService:
         # sql, params are set for sql query grammar
 
 
-def get_user_by_id(self, user_id: int) -> Optional[dict]:
-    """SELECT user by id"""
-    sql = """
-    SELECT id, username
-    FROM users
-    WHERE id = %s
-    """
-    results = self.db_manager.execute_query(sql, (user_id,), fetch=True)
-    return self.row_to_dict(results[0]) if results else None
-    # this def will have only one tuple as result
+    def get_user_by_id(self, user_id: int) -> Optional[dict]:
+        """SELECT user by id"""
+        sql = """
+        SELECT id, username, nickname
+        FROM users
+        WHERE id = %s
+        """
+        results = self.db_manager.execute_query(sql, (user_id,), fetch=True)
+        if not results:
+            return None
+        columns = ['id', 'username', 'nickname', 'password_hash']
+        return self.row_to_dict(results[0], columns) if results else None
+        # this def will have only one tuple as result
 
-def get_user_by_username(self, username: str) -> Optional[dict]:
-    """SELECT user by username"""
-    sql = """
-    SELECT id, username
-    FROM users
-    WHERE username = %s
-    """
-    results = self.db_manager.execute_query(sql, (username,), fetch=True)
-    return self.row_to_dict(results[0]) if results else None
-    # this def will have only one tuple as result
 
-def delete_user_by_id(self, user_id: int) -> Optional[dict]:
-    """DELETE user by id"""
-    sql = """
-    DELETE id, username, nickname, password_hash
-    FROM users
-    WHERE id = %s
-    """
-    results = self.db_manager.execute_query(sql, (user_id,), fetch=True)
-    return self.row_to_dict(results[0]) if results else None
-    # this def will have only one tuple as result
+    def get_user_by_username(self, username: str) -> Optional[dict]:
+        """SELECT user by username"""
+        sql = """
+        SELECT id, username, nickname
+        FROM users
+        WHERE username = %s
+        """
+        results = self.db_manager.execute_query(sql, (username,), fetch=True)
+        if not results:
+            return None
+        columns = ['id', 'username', 'nickname', 'password_hash']
+        return self.row_to_dict(results[0], columns) if results else None
+        # this def will have only one tuple as result
+
+# need to be careful and need to check if this is a right way to delete
+    def delete_user_by_id(self, user_id: int) -> Optional[dict]:
+        """DELETE user by id"""
+        sql = """
+        DELETE FROM users
+        WHERE id = %s
+        """
+        results = self.db_manager.execute_query(sql, (user_id,), fetch=True)
+        return results > 0
+        # this def will have only one tuple as result

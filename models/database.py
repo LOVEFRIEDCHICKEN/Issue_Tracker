@@ -48,7 +48,6 @@ class DatabaseManager:
             conn = self.get_connection()
             cursor = conn.cursor() # cursor make sql run + return result
             cursor.execute(query, params or ())
-            conn.commit()
 
             if fetch:
                 # fetch will decide if it will bring the result of SELECT or ETC
@@ -56,6 +55,7 @@ class DatabaseManager:
                 # fetch=true will call fetchall, fetch=false will call rowcount or 'lastrowid'
                 return cursor.fetchall() # it will return the list of tuple
             else:
+                conn.commit()
                 # INSERT = lastrowid, else rowcount
                 if query.strip().upper().startswith("INSERT"):
                     return cursor.lastrowid

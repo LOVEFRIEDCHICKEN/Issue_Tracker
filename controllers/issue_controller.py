@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
+from flask_login import login_required
 from services.issue_service import IssueService
 from config import Config
 from typing import Dict, Any
@@ -28,6 +29,13 @@ def get_issues():
     issues = service.get_all_issues()
     return jsonify(issues)
 
+
+@issue_bp.route('/list', methods = ['GET'])
+@login_required
+def issue_list_page():
+    """Issue List Page"""
+    issues = service.get_all_issues()
+    return render_template('issues.html', issues = issues)
 
 
 @issue_bp.route('/<int:issue_id>', methods = ['GET']) # connect and get from api/issues
@@ -60,6 +68,7 @@ def delete_issue(issue_id: int):
         return jsonify({'Message': 'Issue has been deleted'})
     return jsonify({'Error': 'Issue cannot be found'}), 404
 
+
 @issue_bp.route('/search', methods = ['GET'])
 def search_issue():
     """search issues by keyword"""
@@ -69,3 +78,5 @@ def search_issue():
 
     results = service.search_issue(keyword)
     return jsonify(results)
+
+

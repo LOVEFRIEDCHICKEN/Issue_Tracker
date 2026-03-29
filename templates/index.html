@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Landing Page -->
+<div>
+    <h1>Welcome to Issue Tracker</h1>
+    <p>Register the Issues, track it, and fix it</p>
+
+    {% if not current_user.is_authenticated %}
+    <div>
+        <a href="{{ url_for('auth.login') }}">
+            <button>Login</button>
+        </a>
+        <a href="{{ url_for('auth.user_register') }}">
+            <button>Register</button>
+        </a>
+    </div>
+    {% else %}
+    <div>
+        <p>{{ current_user.username }}, Welcome</p>
+        <a href="{{ url_for('issue.get_issues') }}">
+            <button>Show Issue List</button>
+        </a>
+    </div>
+    {% endif %}
+
+    <hr>
+
+    <h2>Main Function</h2>
+    <ul>
+        <li>Add and manage issue</li>
+        <li>Issue status tracking</li>
+        <li>Keyword Search</li>
+        <li>Control Assignee<small>Plan to</small></li>
+        <li>Manage Deadline<small>Plan to</small></li>
+    </ul>
+</div>
+
+{% endblock %}

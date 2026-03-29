@@ -4,18 +4,74 @@
     <meta charset="UTF-8">
     <title>Issue Tracker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .layout {
+            display: flex; /* Nav on left, sort with text */
+            flex: 1;
+        }
+        nav.side-nav{
+            width: 160px;
+            border-right: 1px solid #ccc;
+            padding: 16px;
+        }
+        .main-content {
+            flex: 1; /* will take all other space */
+            padding: 16px;
+        }
+    </style>
 </head>
 <body>
-<nav>
-    <a href = "{{ url_for('health_check') }}">Home</a> <!-- before main.index -->
-    {% if current_user.is_authenticated %}
-    <a href="{{ url_for('issues.list') }}">Issue List</a>
-    <a href="{{ url_for('auth.logout') }}">Log Out</a>
-    {% else %}
-    <a href="{{ url_for('auth.login') }}">Log In</a>
-    <a href="{{ url_for('auth.user_register') }}">Sign Up</a>
-    {% endif %}
-</nav>
+<!-- Top Header: Click the Issue Tracker then go to Landing Page -->
+<header>
+    <h1>
+        <a href="{{ url_for('health_check') }}">Issue Tracker</a>
+    </h1>
+
+<!-- Top right  -->
+    <div>
+        {% if current_user.is_authenticated %}
+            <span>{{ current_user.name }}</span>
+            <a href="{{ url_for('issues.list') }}">Issue List</a>
+            <a href="{{ url_for('auth.logout') }}">Log Out</a>
+            <a href="{{ url_for('auth.delete_account_page') }}">Delete Account</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Log In</a>
+            <a href="{{ url_for('auth.user_register') }}">Sign Up</a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="layout">
+    <!-- left nav -->
+    <nav class="side-nav">
+        <ul>
+            <li><a href="{{ url_for('health_check') }}">Home</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('issue.issue_list_page') }}">Issue List</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- main content -->
+    <main class="main-content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+</div>
+
 {% block content %}{% endblock %}
 </body>
 </html>

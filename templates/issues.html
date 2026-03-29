@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Issue List</h2>
+
+<!-- Search form -->
+<form method="GET" action="{{ url_for('issue.search_issue') }}">
+    <input type="text" name="q" placeholder="Keyword Search">
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+<!-- Issue List Table -->
+{% If issues %}
+<table border="1"> <!-- need this for able to see a border without scc-->
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Project</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Reporter</th>
+            <th>Log Date</th>
+            <th>Update Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for issue in issues %}
+        <tr>
+            <td>{{ issue.id }}</td>
+            <td>{{ issue.project }}</td>
+            <td>
+                <a href="{{ url_for('issue.get_issue', issue_id=issue.id) }}">
+                   {{ issue.issue_title }}
+                </a>
+            </td>
+            <td>{{ issue.issue_status }}</td>
+            <td>{{ issue.priority }}</td>
+            <td>{{ issue.reporter }}</td>
+            <td>{{ issue.log_date }}</td>
+            <td>{{ issue.update_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No Issue on the list yet</p>
+{% endif %}
+
+{% endblock %}
