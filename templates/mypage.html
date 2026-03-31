@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>My Page</h2>
+
+<p><strong>Username: </strong> {{ current_user.username }}</p>
+<p><strong>Nickname: </strong> {{ current_user.nickname }}</p>
+<p><strong>Email: </strong> {{ current_user.email }}</p>
+
+<hr>
+
+<!-- Change Nickname -->
+<h3>Change Nickname</h3>
+<form method="POST" action="{{ url_for('auth.mypage') }}">
+  <input type="hidden" name="action" value="change_nickname">
+  <input type="text" name="nickname" placeholder="New Nickname" required>
+  <button type="submit">Change Nickname</button>
+</form>
+
+<h3>Change Password</h3>
+<form method="POST" action="{{ url_for('auth.mypage') }}">
+  <input type="hidden" name="action" value="change_password">
+  <input type="text" name="current_password" placeholder="Current Password" required>
+  <input type="text" name="password" placeholder="New Password" required>
+  <button type="submit">Change Password</button>
+</form>
+
+<a href="{{ url_for('auth.delete_account_page') }}">Delete Account</a>
+
+{% endblock %}

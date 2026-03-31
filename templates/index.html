@@ -17,6 +17,9 @@
     {% else %}
     <div>
         <p>{{ current_user.username }}, Welcome</p>
+        <a href="{{ url_for('auth.mypage') }}">
+            <button>My page</button>
+        </a>
         <a href="{{ url_for('issue.issue_list_page') }}">
             <button>Show Issue List</button>
         </a>

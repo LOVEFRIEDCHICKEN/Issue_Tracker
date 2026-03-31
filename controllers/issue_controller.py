@@ -1,5 +1,7 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template, url_for, flash
 from flask_login import login_required
+from werkzeug.utils import redirect
+
 from services.issue_service import IssueService
 from config import Config
 from typing import Dict, Any
@@ -10,25 +12,35 @@ service = IssueService(Config())
 # @issue_be.route is only for issue
 @issue_bp.route('/', methods=['POST']) # connect and post to api/issues/
 def create_issue():
-    """add issue API"""
+    """Add issue - Form Post or JSON API"""
     try:
-        data = request.get_json()
-        if not data or data.get('issue_title'):
-            return jsonify({'Error': 'Title is requirement'}), 400 # bad request from data
+        # Form (submit from issues.html)
+        if request.content_type and 'application/json' in request.content_type:
+            data = request.get_json()
+        else:
+            data = request.form.to_dict()
+
+        if not data or not data.get('issue_title'):
+            flash('Title required')
+            return redirect(url_for('issue.issue_list_page'))
 
         issue_id = service.create_issue(data)
-        return jsonify({'Message': 'Issue has created', 'id': issue_id}), 201 # create success
+        flash('Issue has been created')
+        return redirect(url_for('issue.get_issue', issue_id = issue_id)) # redirect to created issue page
     except Exception as e:
-        return jsonify({'Error': str(e)}), 500 # internal server error, DB connect fail / exception code etc
-
+        flash(f'Error: {str(e)}')
+        return redirect(url_for('issue.issue_list_page'))
 
 
 @issue_bp.route('/', methods = ['GET']) # connect and get from api/issues
-def get_issues(): # This will work differently with issue_list_page, better to leave it here.
+def get_issues(issue_id:int): # This will work differently with issue_list_page, better to leave it here.
     # For external tool, it can call json data later.
-    """show all issues list API"""
-    issues = service.get_all_issues()
-    return jsonify(issues)
+    """show all issues list"""
+    issue = service.get_issue_by_id(issue_id)
+    if not issue:
+        flash('Issue cannot be found')
+        return redirect(url_for('issue.issue_list_page'))
+    return render_template('issue_detail.html', issue = issue)
 
 
 @issue_bp.route('/list', methods = ['GET'])

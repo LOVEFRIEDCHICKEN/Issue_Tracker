@@ -9,4 +9,5 @@ class UserInfo(UserMixin):
     id: Optional[int] = None # id will be automatically increased
     username: str = ""
     nickname: str = ""
+    email: str = ""
     password_hash: str = ""

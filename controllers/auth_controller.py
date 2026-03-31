@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user, LoginManager
 from services.user_service import UserService
 from config import Config
@@ -18,6 +18,39 @@ def load_user(user_id):
     return service.get_user_by_id(int(user_id))
 
 
+@auth_bp.route('/mypage', methods = ['GET', 'POST'])
+@login_required
+def mypage():
+    """My page // Change Nickname & Password"""
+    if request.method == 'POST':
+        action = request.form.get('action') # through hidden input, can identify which form it is.
+        # Can see on mypage.html
+
+        if action == 'change_nickname':
+            new_nickname = request.form.get('nickname')
+            if not new_nickname:
+                flash('Please enter a new nickname')
+            else:
+                service.update_nickname(current_user.id, new_nickname)
+                flash('Nickname has been changed')
+
+        elif action == 'change_password':
+            current_password = request.form.get('current_password')
+            new_password = request.form.get('new_password')
+
+            user = service.get_user_with_password_by_id(current_user.id)
+            if not user or not check_password_hash(user['password_hash'], current_password):
+                # if wrong input for current password
+                flash('Wrong password')
+            elif not new_password:
+                flash("Please enter a new password")
+            else:
+                service.update_password(current_user.id, new_password)
+                flash('Password has been changed')
+
+    return render_template('mypage.html')
+
+
 @auth_bp.route('/register', methods = ['GET', 'POST'])
 # GET = register rendering / POST = form data -> call user_service.create_user() and redirect, flash msg
 def user_register():
@@ -25,12 +58,13 @@ def user_register():
     if request.method == 'POST':
         username = request.form['username']
         nickname = request.form['nickname']
+        email = request.form['email']
         password = request.form['password']
-        if service.get_user_by_username(username): # check if it is already exist
-            flash('Already Exist username')
+        if service.get_user_by_email(email): # check if it is already exist
+            flash('Already Exist Email')
             return redirect(url_for('auth.user_register')) # before = auth.register
 
-        user_data = {'username': username, 'nickname': nickname, 'password': password}
+        user_data = {'username': username, 'nickname': nickname, 'email': email, 'password': password}
         service.create_user(user_data)
         flash('Sign up complete')
         return redirect(url_for('auth.login'))
@@ -41,15 +75,15 @@ def user_register():
 def login():
     """login account"""
     if request.method == 'POST':
-        username = request.form.get('username')
+        email = request.form.get('email')
         password = request.form.get('password')
-        if not username or not password:
+        if not email or not password:
             flash('Enter the ID and Password')
             return render_template('login.html')
 
-        user = service.get_user_with_password(username) # need password for login
+        user = service.get_user_with_password(email) # need password for login
         if user and check_password_hash(user['password_hash'], request.form['password']):
-            login_user(UserInfo(id=user['id'], username = user['username'], nickname = user['nickname']))
+            login_user(UserInfo(id=user['id'], username = user['username'], nickname = user['nickname'], email = user['email']))
             return redirect(url_for('issue.issue_list_page')) # if there is landing page, need to change url here
         flash('Failed to login')
         return render_template('login.html')
@@ -75,7 +109,7 @@ def delete_account_page():
 def delete_account():
     """Check Password and Soft Delete"""
     password = request.form.get('Password') # need to check if this name is right or not
-    user = service.get_user_with_password(current_user.username)
+    user = service.get_user_with_password_by_id(current_user.id)
 
     if not user or not check_password_hash(user['password_hash'], password):
         flash('Incorrect Password')

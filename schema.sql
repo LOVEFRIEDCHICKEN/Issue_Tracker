@@ -49,13 +49,15 @@ CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) DEFAULT NULL,
   `nickname` varchar(20) DEFAULT NULL,
+  `email` varchar(100) DEFAULT '',
   `password_hash` varchar(255) DEFAULT NULL,
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `is_deleted` tinyint(1) DEFAULT '0',
   `deleted_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -67,4 +69,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-30  0:15:30
+-- Dump completed on 2026-03-31 22:08:14
