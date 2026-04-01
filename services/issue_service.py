@@ -21,7 +21,7 @@ class IssueService:
         )
         sql = """
         INSERT INTO issue_list (project, issue_title, issue_description, priority, fatality, version, issue_status, reporter)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
 
         params = (
@@ -61,7 +61,7 @@ class IssueService:
 
 
     # Update status of issue
-    def update_issue_status(self, issue_id: int, status: str) -> bool:  # bool means it will return true or false
+    def update_issue_status(self, status: str, issue_id: int) -> bool:  # bool means it will return true or false
         sql = """
         UPDATE issue_list
         SET issue_status = %s, update_date = NOW()
@@ -80,7 +80,7 @@ class IssueService:
         WHERE id = %s
         """
         # need caution. use delete very carefully.
-        result = self.db_manager.execute_query(sql, (issue_id,))
+        result = self.db_manager.execute_query(sql, (issue_id))
         # it will check status first then id, so need to put status first in result
         return result > 0
 

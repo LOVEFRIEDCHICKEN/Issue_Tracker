@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template, url_for, flash
-from flask_login import login_required, current_user
+from flask_login import login_required
 from werkzeug.utils import redirect
 
 from services.issue_service import IssueService
@@ -9,16 +9,8 @@ from typing import Dict, Any
 issue_bp = Blueprint('issue', __name__, url_prefix='/api/issues') # flask blueprint's route decorator
 service = IssueService(Config())
 
-
-@issue_bp.route('/new', methods = ['GET'])
-@login_required
-def register_issue_page():
-    """Render page for Register New Issue"""
-    return render_template('register_new_issue.html')
-
-
+# @issue_be.route is only for issue
 @issue_bp.route('/', methods=['POST']) # connect and post to api/issues/
-@login_required
 def create_issue():
     """Add issue - Form Post or JSON API"""
     try:
@@ -27,8 +19,6 @@ def create_issue():
             data = request.get_json()
         else:
             data = request.form.to_dict()
-
-        data['reporter'] = current_user.nickname # for common use, place it out of if statement
 
         if not data or not data.get('issue_title'):
             flash('Title required')
@@ -40,6 +30,17 @@ def create_issue():
     except Exception as e:
         flash(f'Error: {str(e)}')
         return redirect(url_for('issue.issue_list_page'))
+
+
+@issue_bp.route('/', methods = ['GET']) # connect and get from api/issues
+def get_issues(issue_id:int): # This will work differently with issue_list_page, better to leave it here.
+    # For external tool, it can call json data later.
+    """show all issues list"""
+    issue = service.get_issue_by_id(issue_id)
+    if not issue:
+        flash('Issue cannot be found')
+        return redirect(url_for('issue.issue_list_page'))
+    return render_template('issue_detail.html', issue = issue)
 
 
 @issue_bp.route('/list', methods = ['GET'])
@@ -56,33 +57,29 @@ def get_issue(issue_id: int):
     issue = service.get_issue_by_id(issue_id)
     if not issue:
         return jsonify({'Error' : 'Issue cannot be found'}), 404 # not found
-    return render_template('issue_detail.html', issue = issue)
+    return jsonify(issue)
 
 
 # update issue
-@issue_bp.route('/<int:issue_id>/status', methods = ['POST'])
+@issue_bp.route('/<int:issue_id>/status', methods = ['PUT']) # connect and put to api/issues
 def update_issue_status(issue_id: int):
-    """update issue status"""
-    data = request.form
+    """update issue status API"""
+    data = request.get_json()
     status = data.get('status')
     if not status:
-        flash('Status Required')
-        return redirect(url_for('issue.get_issue', issue_id = issue_id))
+        return jsonify({'Error': 'Status is requirement'}), 400
 
     if service.update_issue_status(issue_id, status):
-        flash(f'Status has been changed to {status}')
+        return jsonify({'Message': f'Status has changed to {status}'})
+    return jsonify({'Error': 'Issue cannot be found'}), 404
 
-    return redirect(url_for('issue.get_issue', issue_id = issue_id))
 
-
-@issue_bp.route('/<int:issue_id>', methods = ['POST']) #connect and delete from api/issues
+@issue_bp.route('/<int:issue_id>', methods = ['DELETE']) #connect and delete from api/issues
 def delete_issue(issue_id: int):
     """delete issue"""
     if service.delete_issue(issue_id):
-        flash('Issue has been deleted')
-    else:
-        flash('Issue cannot be found') # it only works in detail page, you will never see this but just in case.
-    return redirect(url_for('issue.issue_list_page'))
+        return jsonify({'Message': 'Issue has been deleted'})
+    return jsonify({'Error': 'Issue cannot be found'}), 404
 
 
 @issue_bp.route('/search', methods = ['GET'])

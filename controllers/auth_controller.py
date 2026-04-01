@@ -33,7 +33,6 @@ def mypage():
             else:
                 service.update_nickname(current_user.id, new_nickname)
                 flash('Nickname has been changed')
-                return redirect(url_for('auth.mypage'))  # for immediate reflect
 
         elif action == 'change_password':
             current_password = request.form.get('current_password')
@@ -48,7 +47,6 @@ def mypage():
             else:
                 service.update_password(current_user.id, new_password)
                 flash('Password has been changed')
-
 
     return render_template('mypage.html')
 
