@@ -2,26 +2,11 @@
 {% block content %}
 <!-- Show All Issue List -->
 <h2>Issue List</h2>
-<details>
-    <summary>Register New Issue</summary>
-    <form method="POST" action="{{ url_for('issue.create_issue') }}">
-        <input type="text" name="project" placeholder="Project" required>
-        <input type="text" name="issue_title" placeholder="Title" required>
-        <br>
-        <textarea name="issue_description" placeholder="Description" required></textarea>
-        <br>
-        <select name="priority">
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-        </select>
-        <input type="text" name="fatality" placeholder="Fatality">
-        <input type="text" name="version" placeholder="Version">
-        <input type="text" name="reporter" placeholder="Reporter">
-        <br>
-        <button type="submit">Register Issue</button>
-    </form>
-</details>
+<!-- Register Issue Button -->
+<a href="{{ url_for('issue.register_issue_page') }}">
+   <button type="button">Register New Issue</button>
+</a>
+
 <hr>
 
 <!-- Search form -->
