@@ -20,9 +20,23 @@
 <h3>Change Password</h3>
 <form method="POST" action="{{ url_for('auth.mypage') }}">
   <input type="hidden" name="action" value="change_password">
-  <input type="text" name="current_password" placeholder="Current Password" required>
-  <input type="text" name="password" placeholder="New Password" required>
+  <input type="password" id = "current_password" name="current_password" placeholder="Current Password" required>
+  <input type="password" id = "new_password" name="new_password" placeholder="New Password" required>
   <button type="submit">Change Password</button>
+  <!-- Add id for JS -->
+  <label>
+    <input type="checkbox" onclick="togglePasswordVisibility()"> Show Password
+  </label>
+
+  <script>
+  function togglePasswordVisibility() {
+    const fields = ['current_password', 'new_password'];
+    fields.forEach(function(id){
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+      });
+  }
+  </script>
 </form>
 
 <a href="{{ url_for('auth.delete_account_page') }}">Delete Account</a>

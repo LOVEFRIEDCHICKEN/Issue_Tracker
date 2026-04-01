@@ -8,12 +8,19 @@
 <p><strong>Status:</strong> {{ issue.issue_status }}</p>
 <p><strong>Reporter:</strong> {{ issue.reporter }}</p>
 {% if current_user.is_authenticated %}
-<form method="POST" action="{{ url_for('issue.update_status', issue_id=issue.id) }}">
+<!-- connected with issue_service.py -->
+<form method="POST" action="{{ url_for('issue.update_issue_status', issue_id=issue.id) }}">
 <select name="status">
-<option value="Open">Open</option><option value="Closed">Closed</option>
+    <option value="open">Open</option>
+    <option value="in_progress">In Progress</option>
+    <option value="not_issue">Not Issue</option>
+    <option value="hold">Hold</option>
+    <option value="closed">Closed</option>
 </select>
 <button>Update</button>
 </form>
-<a href="{{ url_for('issue.delete', issue_id=issue.id) }}">Delete</a>
+<form method="post" action="{{ url_for('issue.delete_issue', issue_id = issue.id) }}">
+    <button type="submit">Delete</button><p>※Deletion cannot be undone※</p>
+</form>
 {% endif %}
 {% endblock %}

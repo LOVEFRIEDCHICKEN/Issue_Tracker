@@ -95,7 +95,7 @@ class UserService:
         sql = """
         SELECT id, username, nickname, email, password_hash
         FROM users
-        WHERE email = %s AND is_deleted = FALSE
+        WHERE id = %s AND is_deleted = FALSE
         """
         result = self.db_manager.execute_query(sql, (user_id,), fetch = True)
         if not result:

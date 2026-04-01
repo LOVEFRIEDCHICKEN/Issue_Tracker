@@ -26,19 +26,17 @@
 </head>
 <body>
 
-<!-- Top Header: Click the Issue Tracker then go to Landing Page -->
+<!-- Main Page Top Header -->
 <header>
     <h1>
         <a href="{{ url_for('health_check') }}">Issue Tracker</a>
     </h1>
 
-    <!-- Top right  -->
+    <!-- Man Page Top  -->
     <div>
         {% if current_user.is_authenticated %}
             <span>{{ current_user.nickname }}</span>
-            <a href="{{ url_for('issue.issue_list_page') }}">Issue List</a>
             <a href="{{ url_for('auth.logout') }}">Log Out</a>
-            <a href="{{ url_for('auth.delete_account_page') }}">Delete Account</a>
         {% else %}
             <a href="{{ url_for('auth.login') }}">Log In</a>
             <a href="{{ url_for('auth.user_register') }}">Sign Up</a>
@@ -52,6 +50,7 @@
         <ul>
             <li><a href="{{ url_for('health_check') }}">Home</a></li>
             {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('auth.mypage') }}">My Page</a></li>
             <li><a href="{{ url_for('issue.issue_list_page') }}">Issue List</a></li>
             {% endif %}
         </ul>
@@ -61,11 +60,11 @@
     <main class="main-content">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul>
+                <script>
                     {% for message in messages %}
-                        <li>{{ message }}</li>
+                        alert("{{ message }}")
                     {% endfor %}
-                </ul>
+                </script>
             {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
