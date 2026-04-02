@@ -19,6 +19,15 @@ class Issue:
     log_date: Optional[datetime] = None # date will be automatically logged
     update_date: Optional[datetime] = None # same above
 
+
+@dataclass()
+class Project:
+    id: Optional[int] = None # DB will automatically log
+    name: str = ""
+    description: str = ""
+    created_at: Optional[datetime] = None # DB will automatically log
+
+
 class DatabaseManager:
     def __init__(self, config: Config): # from config.py, load Config class
         self.config = config

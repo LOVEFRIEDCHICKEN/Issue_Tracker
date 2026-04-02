@@ -3,7 +3,12 @@
 
 <h2>Register New Issue</h2>
 <form method="POST" action="{{ url_for('issue.create_issue') }}">
-  <input type="text" name="project" placeholder="Project" required>
+  <select name="project" required>
+    <option value="" disabled selected>Project</option>
+    {% for project in projects %}
+    <option value="{{ project.name }}">{{ project.name }}</option>
+    {% endfor %}
+  </select>
   <input type="text" name="issue_title" placeholder="Title" required>
   <br>
   <textarea name="issue_description" placeholder="Description" required></textarea>
@@ -13,6 +18,7 @@
     <option value="medium">Medium</option>
     <option value="low">Low</option>
   </select>
+
   <select name="fatality">
     <option value="high">High</option>
     <option value="medium">Medium</option>
