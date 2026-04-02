@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Admin Page</h2>
+
+<hr>
+<h3>Projects</h3>
+
+<!-- Project Create -->
+<h4>Create New Project</h4>
+<form method="post" action="{{ url_for('admin.create_project') }}">
+  <input type="text" name="name" placeholder="Project name" required>
+  <input type="text" name="description" placeholder="Project Description">
+  <button type="submit">Create</button>
+</form>
+
+<!-- Project List -->
+{% if projects %}
+<table border="1">
+  <thead>
+    <tr><th>ID</th><th>Name</th><th>Desc</th><th>Created</th><th>Edit</th><th>Delete</th></tr>
+  </thead>
+  <tbody>
+    {% for project in projects %}
+    <tr>
+      <td>{{ project.id }}</td>
+      <td>{{ project.name }}</td>
+      <td>{{ project.description }}</td>
+      <td>{{ project.created_at }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin.update_project', project_id = project.id) }}">
+          <input type="text" name="name" value="{{ project.name }}" required>
+          <input type="text" name="description" value="{{ project.description }}">
+          <button type="submit">Update</button>
+        </form>
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('admin.delete_project', project_id = project.id) }}">
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No Project yet</p>
+{% endif %}
+
+<!-- User Role only can be changed by Admin -->
+{% if current_user.role == 'admin' %}
+<hr>
+<h3>User Role Manage</h3>
+
+{% if users %}
+
+<table border="1">
+  <thead>
+    <tr><th>ID</th><th>Username</th><th>Nickname</th><th>Email</th><th>Role</th><th>Change</th></tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.nickname }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
+      <td>
+        {% if user.username != 'serviceowner' %}
+        <form method="post" action="{{ url_for('admin.update_user_role', user_id = user.id) }}">
+          <select name="role">
+            <option value="user" {{ 'selected' if user['role'] == 'user'  else '' }}>user</option>
+            <option value="manager" {{ 'selected' if user['role'] == 'manager' else '' }}>manager</option>
+            <option value="admin" {{ 'selected' if user['role'] == 'admin' else '' }}>admin</option>
+          </select>
+          <button type="submit">Update</button>
+        </form>
+        {% else %}
+        <span>-</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endif %}
+
+{% endblock %}

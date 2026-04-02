@@ -4,6 +4,7 @@ from flask_cors import CORS
 from config import Config
 from controllers.auth_controller import login_manager, auth_bp
 from controllers.issue_controller import issue_bp
+from controllers.admin_controller import admin_bp
 
 def create_app():
     flask_app = Flask(__name__) # create flask app object + set route
@@ -19,7 +20,8 @@ def create_app():
 
     # Register Blueprint
     flask_app.register_blueprint(auth_bp)
-    flask_app.register_blueprint(issue_bp) # Register API
+    flask_app.register_blueprint(issue_bp)
+    flask_app.register_blueprint(admin_bp)
 
     CORS(flask_app) # allow to call api
 

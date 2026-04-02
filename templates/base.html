@@ -52,6 +52,9 @@
             {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('auth.mypage') }}">My Page</a></li>
             <li><a href="{{ url_for('issue.issue_list_page') }}">Issue List</a></li>
+            {% if current_user.role in ('admin', 'manager') %}
+            <li><a href="{{ url_for('admin.admin_page') }}">Admin Page</a></li>
+            {% endif %}
             {% endif %}
         </ul>
     </nav>

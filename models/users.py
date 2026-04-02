@@ -11,3 +11,4 @@ class UserInfo(UserMixin):
     nickname: str = ""
     email: str = ""
     password_hash: str = ""
+    role: str = "user"

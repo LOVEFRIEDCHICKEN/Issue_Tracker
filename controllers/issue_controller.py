@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, render_template, url_for, flash
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
+from controllers.admin_controller import project_service
+from services.project_service import ProjectService
 from services.issue_service import IssueService
 from config import Config
 from typing import Dict, Any
@@ -14,7 +16,8 @@ service = IssueService(Config())
 @login_required
 def register_issue_page():
     """Render page for Register New Issue"""
-    return render_template('register_new_issue.html')
+    projects = project_service.get_all_projects()
+    return render_template('register_new_issue.html', projects = projects)
 
 
 @issue_bp.route('/', methods=['POST']) # connect and post to api/issues/

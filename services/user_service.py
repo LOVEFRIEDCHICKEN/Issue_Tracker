@@ -46,10 +46,37 @@ class UserService:
         # sql, params are set for sql query grammar
 
 
+    def get_all_users(self) -> List[dict]:
+        """Get all users for admin page"""
+        sql = """
+        SELECT id, username, nickname, email, role
+        FROM users
+        WHERE is_deleted = FALSE
+        ORDER BY id
+        """
+        results = self.db_manager.execute_query(sql, fetch = True)
+        if not results:
+            return []
+        columns = ['id', 'username', 'nickname', 'email', 'role']
+        return [self.row_to_dict(row, columns) for row in results]
+
+
+    def update_user_role(self, user_id:int, role:str) -> bool:
+        """Grant / Revoke project create permission"""
+        sql = """
+        UPDATE users
+        SET role = %s
+        WHERE id = %s AND is_deleted = FALSE
+        """
+        result = self.db_manager.execute_query(sql, (role, user_id))
+        # it will only update not select, so no need for fetch
+        return result > 0
+
+
     def get_user_by_id(self, user_id: int) -> Optional[dict]:
         """SELECT user by id"""
         sql = """
-        SELECT id, username, nickname, email
+        SELECT id, username, nickname, email, role
         FROM users
         WHERE id = %s AND is_deleted = FALSE
         """
@@ -57,7 +84,7 @@ class UserService:
         if not results:
             return None
         row = results[0]
-        return UserInfo(id = row[0], username = row[1], nickname = row[2], email = row[3]) if results else None
+        return UserInfo(id = row[0], username = row[1], nickname = row[2], email = row[3], role = row[4]) if results else None
         # this def will have only one tuple as result
 
 
@@ -136,3 +163,5 @@ class UserService:
         """
         result = self.db_manager.execute_query(sql, (user_id,))
         return result > 0
+
+
