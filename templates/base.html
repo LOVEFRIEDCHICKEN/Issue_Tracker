@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <title>Issue Tracker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-        .layout {
-            display: flex; /* Nav on left, sort with text */
-            flex: 1;
-        }
-        nav.side-nav{
-            width: 160px;
-            border-right: 1px solid #ccc;
-            padding: 16px;
-        }
-        .main-content {
-            flex: 1; /* will take all other space */
-            padding: 16px;
-        }
-    </style>
+<!--    <style>-->
+<!--        body {-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--        }-->
+<!--        .layout {-->
+<!--            display: flex; /* Nav on left, sort with text */-->
+<!--            flex: 1;-->
+<!--        }-->
+<!--        nav.side-nav{-->
+<!--            width: 160px;-->
+<!--            border-right: 1px solid #ccc;-->
+<!--            padding: 16px;-->
+<!--        }-->
+<!--        .main-content {-->
+<!--            flex: 1; /* will take all other space */-->
+<!--            padding: 16px;-->
+<!--        }-->
+<!--    </style>-->
 </head>
 <body>
 
@@ -35,7 +35,7 @@
     <!-- Man Page Top  -->
     <div>
         {% if current_user.is_authenticated %}
-            <span>{{ current_user.nickname }}</span>
+            <a href="{{ url_for('auth.mypage') }}">{{ current_user.nickname }}</a>
             <a href="{{ url_for('auth.logout') }}">Log Out</a>
         {% else %}
             <a href="{{ url_for('auth.login') }}">Log In</a>

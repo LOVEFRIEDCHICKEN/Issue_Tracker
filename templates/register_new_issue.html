@@ -3,28 +3,46 @@
 
 <h2>Register New Issue</h2>
 <form method="POST" action="{{ url_for('issue.create_issue') }}">
-  <select name="project" required>
-    <option value="" disabled selected>Project</option>
-    {% for project in projects %}
-    <option value="{{ project.name }}">{{ project.name }}</option>
-    {% endfor %}
-  </select>
-  <input type="text" name="issue_title" placeholder="Title" required>
+  <label>
+    Project
+    <select name="project" required>
+      <option value="" disabled selected>Project</option>
+      {% for project in projects %}
+      <option value="{{ project.name }}">{{ project.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
   <br>
-  <textarea name="issue_description" placeholder="Description" required></textarea>
-  <br>
-  <select name="priority">
-    <option value="high">High</option>
-    <option value="medium">Medium</option>
-    <option value="low">Low</option>
-  </select>
-
-  <select name="fatality">
-    <option value="high">High</option>
-    <option value="medium">Medium</option>
-    <option value="low">Low</option>
-  </select>
-  <input type="text" name="version" placeholder="Version" required>
+  <label>
+    Title
+    <input type="text" name="issue_title" placeholder="Title" required>
+    <br>
+  </label>
+  <label>
+    Description
+    <textarea name="issue_description" placeholder="Description" required></textarea>
+  </label>
+    <br>
+  <label>
+    Priority
+    <select name="priority">
+      <option value="high">High</option>
+      <option value="medium">Medium</option>
+      <option value="low">Low</option>
+    </select>
+  </label>
+  <label>
+    Fatality
+    <select name="fatality">
+      <option value="high">High</option>
+      <option value="medium">Medium</option>
+      <option value="low">Low</option>
+    </select>
+  </label>
+  <label>
+    Version
+    <input type="text" name="version" placeholder="Version" required>
+  </label>
   <br>
   <button type="submit">Register Issue</button>
   <a href="{{ url_for('issue.issue_list_page')}}">Cancel</a>

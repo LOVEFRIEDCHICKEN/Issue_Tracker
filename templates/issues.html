@@ -3,9 +3,7 @@
 <!-- Show All Issue List -->
 <h2>Issue List</h2>
 <!-- Register Issue Button -->
-<a href="{{ url_for('issue.register_issue_page') }}">
-   <button type="button">Register New Issue</button>
-</a>
+<a href="{{ url_for('issue.register_issue_page') }}" class = "btn-secondary">Register New Issue</a>
 
 <hr>
 
@@ -19,7 +17,7 @@
 
 <!-- Issue List Table -->
 {% if issues %}
-<table border="1"> <!-- need this for able to see a border without scc-->
+<table>
     <thead>
         <tr>
             <th>ID</th>
