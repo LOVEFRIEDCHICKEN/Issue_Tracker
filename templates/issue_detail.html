@@ -1,26 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ issue.issue_title }}</h1>
-<p><strong>Project:</strong> {{ issue.project }}</p>
-<p><strong>Description:</strong> {{ issue.issue_description }}</p>
-<p><strong>Priority:</strong> {{ issue.priority }}</p>
-<p><strong>Fatality:</strong> {{ issue.fatality }}</p>
-<p><strong>Status:</strong> {{ issue.issue_status }}</p>
-<p><strong>Reporter:</strong> {{ issue.reporter }}</p>
+
+<div class = "issue-header">
+    <h2>{{ issue.issue_title }}</h2>
+
+    {% if current_user.is_authenticated %}
+    <form method="post" action="{{ url_for('issue.update_issue_status', issue_id = issue.id) }}" class = "status-form">
+        <label>
+            Status
+            <select name="status">
+                <option value="open" {% if issue.issue_status == "open" %} selected {% endif %}>Open</option>
+                <option value="in_progress" {% if issue.issue_status == "in_progress" %} selected {% endif %}>In Progress</option>
+                <option value="not_issue" {% if issue.issue_status == "not_issue" %} selected {% endif %}>Not Issue</option>
+                <option value="hold" {% if issue.issue_status == "hold" %} selected {% endif %}>Hold</option>
+                <option value="closed" {% if issue.issue_status == "closed" %} selected {% endif %}>Closed</option>
+            </select>
+        </label>
+        <button type="submit">Update</button>
+    </form>
+    {% endif %}
+</div>
+
+<div class="issue-info">
+    <label>Project <span>{{ issue.project }}</span></label>
+    <label>Priority <span>{{ issue.priority }}</span></label>
+    <label>Fatality <span>{{ issue.fatality }}</span></label>
+    <label>Version <span>{{ issue.version }}</span></label>
+    <label>Reporter <span>{{ issue.reporter }}</span></label>
+    <label>Log Date <span>{{ issue.log_date }}</span></label>
+    <label>Update Date <span>{{ issue.update_date }}</span></label>
+    <label>Description <span>{{ issue.issue_description }}</span></label>
+</div>
+
 {% if current_user.is_authenticated %}
-<!-- connected with issue_service.py -->
-<form method="POST" action="{{ url_for('issue.update_issue_status', issue_id=issue.id) }}">
-<select name="status">
-    <option value="open">Open</option>
-    <option value="in_progress">In Progress</option>
-    <option value="not_issue">Not Issue</option>
-    <option value="hold">Hold</option>
-    <option value="closed">Closed</option>
-</select>
-<button>Update</button>
-</form>
-<form method="post" action="{{ url_for('issue.delete_issue', issue_id = issue.id) }}">
-    <button type="submit">Delete</button><p>※Deletion cannot be undone※</p>
-</form>
+<div class = "issue-actions">
+    <a href="{{ url_for('issue.edit_issue_page', issue_id=issue.id) }}" class="btn-secondary">Edit Issue</a>
+
+    <form method="post" action = "{{ url_for('issue.delete_issue', issue_id = issue.id) }}">
+        <button type="submit" class="btn-danger">Delete</button>
+        <span>※Deletion cannot be undone</span>
+    </form>
+</div>
+
 {% endif %}
+
 {% endblock %}

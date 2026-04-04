@@ -78,6 +78,34 @@ def update_issue_status(issue_id: int):
     return redirect(url_for('issue.get_issue', issue_id = issue_id))
 
 
+@issue_bp.route('/<int:issue_id>/edit', methods = ['GET'])
+@login_required
+def edit_issue_page(issue_id:int):
+    """Render page for editing issue"""
+    issue = service.get_issue_by_id(issue_id)
+    if not issue:
+        flash('Issue cannot be found')
+        return redirect(url_for('issue.issue_list_page'))
+    projects = project_service.get_all_projects()
+    return render_template('edit_issue.html', issue = issue, projects = projects)
+
+
+@issue_bp.route('/<int:issue_id>/edit', methods = ['POST'])
+@login_required
+def update_issue(issue_id:int):
+    """Update Issue"""
+    data = request.form.to_dict()
+    if not data.get('issue_title'):
+        flash('Title is required')
+        return redirect(url_for('issue.edit_issue_page', issue_id = issue_id))
+
+    if service.update_issue(issue_id, data):
+        flash('Issue has been updated')
+    else:
+        flash('Failed to update issue')
+    return redirect(url_for('issue.get_issue', issue_id = issue_id))
+
+
 @issue_bp.route('/<int:issue_id>', methods = ['POST']) #connect and delete from api/issues
 def delete_issue(issue_id: int):
     """delete issue"""

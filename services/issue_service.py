@@ -100,6 +100,24 @@ class IssueService:
         # same as for row in results
 
 
+    def update_issue(self, issue_id: int, issue_data: dict) -> bool:
+        """Update issue"""
+        sql = """
+        UPDATE issue_list
+        SET issue_title = %s, issue_description = %s, priority = %s, fatality = %s, version = %s, update_date = NOW()
+        WHERE id = %s
+        """
+        params = (issue_data.get('issue_title'),
+                  issue_data.get('issue_description'),
+                  issue_data.get('priority'),
+                  issue_data.get('fatality'),
+                  issue_data.get('version'),
+                  issue_id
+                  )
+        result = self.db_manager.execute_query(sql, params)
+        return result > 0
+
+
     def row_to_dict(self, row: tuple) -> dict: # This works differently with row_to_dict in user_service.py
         """change row to tuple"""
         return {

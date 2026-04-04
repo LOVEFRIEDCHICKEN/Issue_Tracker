@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Edit Issue</h2>
+<form method="post" action="{{ url_for('issue.update_issue', issue_id = issue.id) }}">
+  <label>
+    Project
+    <select name="project" required>
+      {% for project in projects %}
+      <option value="{{ project.name }}"
+        {% if project.name == issue.project %}selected{% endif %}>
+        {{ project.name }}
+      </option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>
+    Title
+    <input type="text" name="issue_title" value="{{ issue.issue_title }}" required>
+  </label>
+
+  <label>
+    Description
+    <textarea name="issue_description" required>{{ issue.issue_description }}</textarea>
+  </label>
+
+  <label>
+    Priority
+    <select name="priority">
+      <option value="high" {% if issue.priority == 'high' %}selected{% endif %}>High</option>
+      <option value="medium" {% if issue.priority == 'medium' %}selected{% endif %}>Medium</option>
+      <option value="low" {% if issue.priority == 'low' %}selected{% endif %}>Low</option>
+    </select>
+  </label>
+
+  <label>
+    Fatality
+    <select name="fatality">
+      <option value="high" {% if issue.fatality == 'high' %}selected{% endif %}>High</option>
+      <option value="medium" {% if issue.fatality == 'medium' %}selected{% endif %}>Medium</option>
+      <option value="low" {% if issue.fatality == 'low' %}selected{% endif %}>Low</option>
+    </select>
+  </label>
+
+  <label>
+    Version
+    <input type="text" name="version" value="{{ issue.version }}" required>
+  </label>
+
+  <button type="submit">Save Changes</button>
+  <a href="{{ url_for('issue.get_issue', issue_id = issue.id) }}">Cancel</a>
+</form>
+
+{% endblock %}

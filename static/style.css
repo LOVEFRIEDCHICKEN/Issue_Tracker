@@ -326,3 +326,65 @@ label {
     color: #5E6C84;
     max-width; 360px;
 }
+
+/* Issue header */
+.issue-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.status-form{
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Issue Detail info */
+.issue-info {
+    background-color: #FFFFFF;
+    border: 1px solid #DFE1E6;
+    border-radius: 3px;
+    padding: 20px;
+    max-width: 600px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.issue-info label {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #5E6C84;
+    max-width: 100%;
+    margin-bottom: 0;
+}
+
+.issue-info label span {
+    font-weight: 400;
+    color: #172B4D;
+}
+
+/* Issue Detail Button */
+.issue-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Delete Button */
+.btn-danger {
+    background-color: #DE350B;
+}
+
+.btn-danger: hover {
+    background-color: #BF2600;
+}
