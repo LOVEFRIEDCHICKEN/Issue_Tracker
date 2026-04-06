@@ -94,7 +94,7 @@ class IssueService:
         FROM issue_list
         WHERE issue_title LIKE %s OR issue_description LIKE %s OR priority LIKE %s or fatality LIKE %s or issue_status LIKE %s OR reporter LIKE %s
         """
-        params = (f"%(keyword)%",) * 6  # 6 cases above, check 6 times
+        params = (f"%{keyword}%",) * 6  # 6 cases above, check 6 times
         results = self.db_manager.execute_query(sql, params, fetch=True)
         return [self.row_to_dict(row) for row in results]
         # same as for row in results

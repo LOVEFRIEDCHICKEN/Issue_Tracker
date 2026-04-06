@@ -6,6 +6,7 @@
 }
 
 body {
+    min-width: 1200px; /* for minimum width fix */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
     font-size: 14px;
     color: #172B4D;
@@ -213,8 +214,9 @@ button[type="button"]:hover {
 /* btn-secondary -- for other style button */
 .btn-secondary {
     display: inline-block;
-    background-color: #F4F5F7;
-    color: 1px solid #DFE1E6;
+    background-color: #0052CC;
+    color: #FFFFFF;
+    border: none;
     border-radius: 3px;
     padding: 8px 16px;
     font-size: 14px;
@@ -225,13 +227,13 @@ button[type="button"]:hover {
 }
 
 .btn-secondary:hover {
-    background-color: #EBECF0;
-    color: #172B4D;
-    text-decoration: non;
+    background-color: #0747A6;
+    color: #FFFFFF !important;
+    text-decoration: none;
 }
 
 .btn-secondary:visited {
-    color: #172B4D;
+    color: #FFFFFF;
 }
 
 /* TABLE */
@@ -330,6 +332,7 @@ label {
 /* Issue header */
 .issue-header {
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
@@ -338,9 +341,11 @@ label {
 
 .status-form{
     display: flex;
-    align-items: flex-end;
-    gap: 8px;
+    flex-direction: row;
     flex-shrink: 0;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
 }
 
 /* Issue Detail info */
@@ -387,4 +392,32 @@ label {
 
 .btn-danger: hover {
     background-color: #BF2600;
+}
+
+td form {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    max-width: none;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+td input[type="text"]{
+    width: auto;
+    max-width: 160px;
+    margin-bottom: 0;
+}
+
+td select {
+    width: auto;
+    max-width: 120px;
+    margin-bottom: 0;
+}
+
+td button {
+    flex-shrink: 0;
 }

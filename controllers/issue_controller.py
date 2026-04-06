@@ -106,6 +106,17 @@ def update_issue(issue_id:int):
     return redirect(url_for('issue.get_issue', issue_id = issue_id))
 
 
+@issue_bp.route('/search', methods = ['GET'])
+def search_issue():
+    """search issues by keyword"""
+    keyword = request.args.get('q', '')
+    if not keyword:
+        return redirect(url_for('issue.issue_list_page'))
+
+    results = service.search_issue(keyword)
+    return render_template('issues.html', issues = results)
+
+
 @issue_bp.route('/<int:issue_id>', methods = ['POST']) #connect and delete from api/issues
 def delete_issue(issue_id: int):
     """delete issue"""
@@ -116,14 +127,6 @@ def delete_issue(issue_id: int):
     return redirect(url_for('issue.issue_list_page'))
 
 
-@issue_bp.route('/search', methods = ['GET'])
-def search_issue():
-    """search issues by keyword"""
-    keyword = request.args.get('q', '')
-    if not keyword:
-        return jsonify({'Error': 'Please enter the keyword'}), 400
 
-    results = service.search_issue(keyword)
-    return jsonify(results)
 
 
