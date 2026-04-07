@@ -8,9 +8,71 @@
 <hr>
 
 <!-- Search form -->
-<form method="GET" action="{{ url_for('issue.search_issue') }}">
-    <input type="text" name="q" placeholder="Keyword Search">
-    <button type="submit">Search</button>
+<form method="GET" action="{{ url_for('issue.search_issue') }}" class = "search-bar search-form">
+    <div class = "search-filters">
+        <!-- Project Dropbox -->
+        <div class="filter-group">
+            <span class="filter-label">Project</span>
+            <select name = "project">
+                <option value="">All</option>
+                {% for project in projects %}
+                <option value = "{{ project.name }}"
+                    {% if request.args.get('project') == project.name %}selected{% endif %}>
+                    {{ project.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Status Dropbox -->
+        <div class = 'filter-group'>
+            <span class="filter-label">Status</span>
+            <select name="status">
+                <option value="">All</option>
+                <option value="open" {% if request.args.get('status') == 'open' %}selected{% endif %}>Open</option>
+                <option value="in_progress" {% if request.args.get('status') == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="not_issue" {% if request.args.get('status') == 'not_issue' %}selected{% endif %}>Not Issue</option>
+                <option value="hold" {% if request.args.get('status') == 'hold' %}selected{% endif %}>Hold</option>
+                <option value="closed" {% if request.args.get('status') == 'closed' %}selected{% endif %}>Closed</option>
+            </select>
+        </div>
+
+        <!-- Priority Dropbox -->
+        <div class="filter-group">
+            <span class="filter-label">Priority</span>
+            <select name="priority">
+                <option value="">All</option>
+                <option value="high" {% if request.args.get('priority') == 'high' %}selected{% endif %}>High</option>
+                <option value="medium" {% if request.args.get('priority') == 'medium' %}selected{% endif %}>Medium</option>
+                <option value="low" {% if request.args.get('priority') == 'low' %}selected{% endif %}>Low</option>
+            </select>
+        </div>
+
+        <!-- Fatality Dropbox -->
+        <div class="filter-group">
+            <span class="filter-label">Fatality</span>
+            <select name="fatality">
+                <option value="">All</option>
+                <option value="high" {% if request.args.get('fatality') == 'high' %}selected{% endif %}>High</option>
+                <option value="medium" {% if request.args.get('fatality') == 'medium' %}selected{% endif %}>Medium</option>
+                <option value="low" {% if request.args.get('fatality') == 'low' %}selected{% endif %}>Low</option>
+            </select>
+        </div>
+
+        <!-- Reporter -->
+        <div class = "filter-group">
+            <span class="filter-label">Reporter</span>
+            <input type="text" name="reporter" placeholder="Reporter" value="{{ request.args.get('reporter','') }}"
+            style="width: auto; max-width: 140px; margin-bottom: 0;">
+        </div>
+    </div>
+
+
+    <div class = "search-keyword">
+        <input type="text" name="q" placeholder="Keyword Search"
+               value="{{ request.args.get('q','') }}">
+        <button type="submit">Search</button>
+    </div>
 </form>
 
 <hr>

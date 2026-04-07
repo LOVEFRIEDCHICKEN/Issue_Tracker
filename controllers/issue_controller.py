@@ -50,7 +50,8 @@ def create_issue():
 def issue_list_page():
     """For HTML Issue List Page Render"""
     issues = service.get_all_issues()
-    return render_template('issues.html', issues = issues)
+    projects = project_service.get_all_projects()
+    return render_template('issues.html', issues = issues, projects = projects)
 
 
 @issue_bp.route('/<int:issue_id>', methods = ['GET']) # connect and get from api/issues
@@ -110,11 +111,15 @@ def update_issue(issue_id:int):
 def search_issue():
     """search issues by keyword"""
     keyword = request.args.get('q', '')
-    if not keyword:
-        return redirect(url_for('issue.issue_list_page'))
+    project = request.args.get('project', '')
+    status = request.args.get('status', '')
+    priority = request.args.get('priority', '')
+    fatality = request.args.get('fatality', '')
+    reporter = request.args.get('reporter', '')
 
-    results = service.search_issue(keyword)
-    return render_template('issues.html', issues = results)
+    projects = project_service.get_all_projects()
+    results = service.search_issue(keyword, project, status, priority, fatality, reporter)
+    return render_template('issues.html', issues = results, projects = projects)
 
 
 @issue_bp.route('/<int:issue_id>', methods = ['POST']) #connect and delete from api/issues

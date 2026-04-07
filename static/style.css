@@ -298,8 +298,16 @@ tbody td a:visited{
 
 /* CARD (mypage, login etc) */
 .main-content > .user-info,
-.main-content > form,
 .main-content > details {
+    background-color: #FFFFFF;
+    border: 1px solid #DFE1E6;
+    border-radius: 3px;
+    padding: 20px;
+    margin-bottom: 16px;
+    max-width: 480px;
+}
+
+.form-card{
     background-color: #FFFFFF;
     border: 1px solid #DFE1E6;
     border-radius: 3px;
@@ -420,4 +428,65 @@ td select {
 
 td button {
     flex-shrink: 0;
+}
+
+/* search bar: filter(L) + keyword(R) placing */
+.search-bar {
+    display: flex;
+    align-items:center;
+    justify=content: space-between;
+    gap: 16px;
+    flex-wrap: nowrap;
+    margin-bottom: 16px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    max-width: none;
+}
+
+.search-filters {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #DFE1E6;
+    border-radius: 3px;
+    padding: 16px;
+}
+
+.search-filters select {
+    width: auto;
+    max-width: 160px;
+    margin-bottom: 0;
+}
+
+.search-keyword {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-keyword input[type="text"] {
+    width: auto;
+    max-width: 200px;
+    margin-bottom: 0;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filter-label {
+    font-size: 11px;
+    font-weight= 600;
+    color: #5E6C84;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.search-form {
+    max-width: 100%
+
 }

@@ -85,17 +85,49 @@ class IssueService:
         return result > 0
 
 
-    def search_issue(self, keyword: str) -> List[dict]:
-        """search issue by keyword
-        can be more than result
-        """
-        sql = """
+    def search_issue(self, keyword: str ='', project: str='', status:str = '', priority:str='', fatality:str='', reporter:str='') -> List[dict]:
+        """search issue"""
+        conditions = []
+        params = []
+
+        # keyword condition
+        if keyword:
+            conditions.append("""(issue_title LIKE %s OR issue_description LIKE %s)""")
+            kw = f"%{keyword}%"
+            params.extend([kw, kw])
+
+        # filter condition
+        if project:
+            conditions.append("project = %s")
+            params.append(project)
+
+        if status:
+            conditions.append("issue_status = %s")
+            params.append(status)
+
+        if priority:
+            conditions.append("priority = %s")
+            params.append(priority)
+
+        if fatality:
+            conditions.append("fatality = %s")
+            params.append(fatality)
+
+        if reporter:
+            conditions.append("reporter = %s")
+            params.append(reporter)
+
+        where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
+
+        sql = f"""
         SELECT id, project, issue_title, issue_description, priority, fatality, version, issue_status, log_date, update_date, reporter
         FROM issue_list
-        WHERE issue_title LIKE %s OR issue_description LIKE %s OR priority LIKE %s or fatality LIKE %s or issue_status LIKE %s OR reporter LIKE %s
+        {where_clause}
+        ORDER BY FIELD(priority, 'high', 'medium', 'low'), id
         """
-        params = (f"%{keyword}%",) * 6  # 6 cases above, check 6 times
         results = self.db_manager.execute_query(sql, params, fetch=True)
+        if not results:
+            return []
         return [self.row_to_dict(row) for row in results]
         # same as for row in results
 

@@ -11,21 +11,21 @@
 
 <!-- Change Nickname -->
 <h3>Change Nickname</h3>
-<form method="POST" action="{{ url_for('auth.mypage') }}">
+<form method="POST" action="{{ url_for('auth.mypage') }}" class="form-card">
   <input type="hidden" name="action" value="change_nickname">
   <input type="text" name="nickname" placeholder="New Nickname" required>
   <button type="submit">Change Nickname</button>
 </form>
 
 <h3>Change Password</h3>
-<form method="POST" action="{{ url_for('auth.mypage') }}">
+<form method="POST" action="{{ url_for('auth.mypage') }}" class="form-card">
   <input type="hidden" name="action" value="change_password">
   <input type="password" id = "current_password" name="current_password" placeholder="Current Password" required>
   <input type="password" id = "new_password" name="new_password" placeholder="New Password" required>
   <button type="submit">Change Password</button>
   <!-- Add id for JS -->
   <label>
-    <input type="checkbox" onclick="togglePasswordVisibility()"> Show Password
+    <input type="checkbox" onclick="togglePasswordVisibility()">Show Password
   </label>
 
   <script>
