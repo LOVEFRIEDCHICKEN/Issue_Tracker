@@ -87,6 +87,7 @@
             <th>Title</th>
             <th>Status</th>
             <th>Priority</th>
+            <th>Fatality</th>
             <th>Reporter</th>
             <th>Log Date</th>
             <th>Update Date</th>
@@ -94,16 +95,14 @@
     </thead>
     <tbody>
         {% for issue in issues %} <!-- Bring issue from issue_list_page(): in issue_controller.py -->
-        <tr>
+        <tr onclick="location.href='{{ url_for('issue.get_issue', issue_id = issue.id) }}'"
+        style="cursor: pointer;">
             <td>{{ issue.id }}</td>
             <td>{{ issue.project }}</td>
-            <td>
-                <a href="{{ url_for('issue.get_issue', issue_id=issue.id) }}">
-                   {{ issue.issue_title }}
-                </a>
-            </td>
+            <td>{{ issue.issue_title }}</td>
             <td>{{ issue.issue_status }}</td>
             <td>{{ issue.priority }}</td>
+            <td>{{ issue.fatality }}</td>
             <td>{{ issue.reporter }}</td>
             <td>{{ issue.log_date }}</td>
             <td>{{ issue.update_date }}</td>
