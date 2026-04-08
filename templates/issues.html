@@ -100,7 +100,7 @@
             <td>{{ issue.id }}</td>
             <td>{{ issue.project }}</td>
             <td>{{ issue.issue_title }}</td>
-            <td>{{ issue.issue_status }}</td>
+            <td>{{ issue.issue_status | format_status }}</td>
             <td>{{ issue.priority }}</td>
             <td>{{ issue.fatality }}</td>
             <td>{{ issue.reporter }}</td>

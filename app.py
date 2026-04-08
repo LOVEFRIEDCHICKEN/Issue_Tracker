@@ -33,6 +33,17 @@ def create_app():
         return render_template('index.html')
         # return {'Message': 'Issue Tracker API is on running', 'version': '1.0.0'}
 
+    @flask_app.template_filter('format_status')
+    def format_status(value):
+        status_mapping = {
+            'open': 'Open',
+            'in_progress': 'In Progress',
+            'not_issue': 'Not Issue',
+            'hold': 'Hold',
+            'closed': 'Closed'
+        }
+        return status_mapping.get(value, value)
+
     return flask_app
 
 
