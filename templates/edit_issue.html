@@ -45,12 +45,14 @@
 
   <label>
     Assignee
-    <select name="assignee">
-      <option value="">Unassigned</option>
+    <input type="text" name="assignee" id="assignee=input" list="assignee-list" placeholder="Search by Nickname"
+    autocapitalize="off">
+    <datalist id="assignee-list">
+      <option value="issue.assignee"></option>
       {% for user in users %}
-      <option value="{{ user.nickname }}" {% if user.nickname == issue.assignee %}selected{% endif %}>{{ user.nickname }}</option>
+      <option value="{{ user.nickname }}">{{ user.nickname }}</option>
       {% endfor %}
-    </select>
+    </datalist>
   </label>
 
   <label>

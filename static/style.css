@@ -490,3 +490,9 @@ td button {
     max-width: 100%
 
 }
+
+.td-placeholder {
+    display: inline-block;
+    min-height: 36px;
+    line-height: 36px;
+}

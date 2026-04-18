@@ -19,7 +19,7 @@ def register_issue_page():
     """Render page for Register New Issue"""
     projects = project_service.get_all_projects()
     users = user_service_instance.get_all_users()
-    return render_template('register_new_issue.html', projects = projects)
+    return render_template('register_new_issue.html', projects = projects, users=users)
 
 
 @issue_bp.route('/', methods=['POST']) # connect and post to api/issues/
@@ -91,7 +91,7 @@ def edit_issue_page(issue_id:int):
         return redirect(url_for('issue.issue_list_page'))
     projects = project_service.get_all_projects()
     users = user_service_instance.get_all_users()
-    return render_template('edit_issue.html', issue = issue, projects = projects)
+    return render_template('edit_issue.html', issue = issue, projects = projects, users = users)
 
 
 @issue_bp.route('/<int:issue_id>/edit', methods = ['POST'])
