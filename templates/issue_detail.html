@@ -23,13 +23,15 @@
 
 <div class="issue-info">
     <label>Project <span>{{ issue.project }}</span></label>
+    <label>Description <span>{{ issue.issue_description }}</span></label>
     <label>Priority <span>{{ issue.priority }}</span></label>
     <label>Fatality <span>{{ issue.fatality }}</span></label>
     <label>Version <span>{{ issue.version }}</span></label>
     <label>Reporter <span>{{ issue.reporter }}</span></label>
+    <label>Assignee <span>{{ issue.assignee }}</span></label>
     <label>Log Date <span>{{ issue.log_date }}</span></label>
     <label>Update Date <span>{{ issue.update_date }}</span></label>
-    <label>Description <span>{{ issue.issue_description }}</span></label>
+
 </div>
 
 {% if current_user.is_authenticated %}

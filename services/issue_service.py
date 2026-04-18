@@ -17,16 +17,17 @@ class IssueService:
             fatality=issue_data.get('fatality', ''),
             version=issue_data.get('version', ''),
             # issue_status='open', # no need
-            reporter=issue_data.get('reporter', 'anonymous')
+            reporter=issue_data.get('reporter', 'anonymous'),
+            assignee=issue_data.get('assignee', '')
         )
         sql = """
-        INSERT INTO issue_list (project, issue_title, issue_description, priority, fatality, version, issue_status, reporter)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO issue_list (project, issue_title, issue_description, priority, fatality, version, issue_status, reporter, assignee)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
 
         params = (
             issue.project, issue.issue_title, issue.issue_description, issue.priority,
-            issue.fatality, issue.version, issue.issue_status, issue.reporter
+            issue.fatality, issue.version, issue.issue_status, issue.reporter, issue.assignee
         )
         return self.db_manager.execute_query(sql, params)
         # sql, params are set for sql query
@@ -37,7 +38,7 @@ class IssueService:
         """get issues as list and show it"""
         """sorted by priority"""
         sql = """
-        SELECT id, project, issue_title, issue_description, priority, fatality, version, issue_status, log_date, update_date, reporter
+        SELECT id, project, issue_title, issue_description, priority, fatality, version, issue_status, log_date, update_date, reporter, assignee
         FROM issue_list
         ORDER BY FIELD(priority, 'high', 'medium', 'low'), id
         """
@@ -51,7 +52,7 @@ class IssueService:
     def get_issue_by_id(self, issue_id: int) -> Optional[dict]:
         """SELECT issue by id"""
         sql = """
-        SELECT id, project, issue_title, issue_description, priority, fatality, version, issue_status, log_date, update_date, reporter
+        SELECT id, project, issue_title, issue_description, priority, fatality, version, issue_status, log_date, update_date, reporter, assignee
         FROM issue_list
         WHERE id = %s
         """
@@ -85,7 +86,7 @@ class IssueService:
         return result > 0
 
 
-    def search_issue(self, keyword: str ='', project: str='', status:str = '', priority:str='', fatality:str='', reporter:str='') -> List[dict]:
+    def search_issue(self, keyword: str ='', project: str='', status:str = '', priority:str='', fatality:str='', reporter:str='', assignee:str="") -> List[dict]:
         """search issue"""
         conditions = []
         params = []
@@ -117,10 +118,14 @@ class IssueService:
             conditions.append("reporter = %s")
             params.append(reporter)
 
+        if assignee:
+            conditions.append("assignee = %s")
+            params.append(assignee)
+
         where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
 
         sql = f"""
-        SELECT id, project, issue_title, issue_description, priority, fatality, version, issue_status, log_date, update_date, reporter
+        SELECT id, project, issue_title, issue_description, priority, fatality, version, issue_status, log_date, update_date, reporter, assignee
         FROM issue_list
         {where_clause}
         ORDER BY FIELD(priority, 'high', 'medium', 'low'), id
@@ -136,7 +141,7 @@ class IssueService:
         """Update issue"""
         sql = """
         UPDATE issue_list
-        SET issue_title = %s, issue_description = %s, priority = %s, fatality = %s, version = %s, update_date = NOW()
+        SET issue_title = %s, issue_description = %s, priority = %s, fatality = %s, version = %s, assignee = %s, update_date = NOW()
         WHERE id = %s
         """
         params = (issue_data.get('issue_title'),
@@ -144,6 +149,7 @@ class IssueService:
                   issue_data.get('priority'),
                   issue_data.get('fatality'),
                   issue_data.get('version'),
+                  issue_data.get('assignee'),
                   issue_id
                   )
         result = self.db_manager.execute_query(sql, params)
@@ -156,6 +162,6 @@ class IssueService:
             'id': row[0], 'project': row[1], 'issue_title': row[2],
             'issue_description': row[3], 'priority': row[4], 'fatality': row[5],
             'version': row[6], 'issue_status': row[7], 'log_date': row[8],
-            'update_date': row[9], 'reporter': row[10]
+            'update_date': row[9], 'reporter': row[10], 'assignee': row[11]
         }
 

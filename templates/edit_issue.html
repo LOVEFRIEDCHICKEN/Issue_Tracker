@@ -44,6 +44,16 @@
   </label>
 
   <label>
+    Assignee
+    <select name="assignee">
+      <option value="">Unassigned</option>
+      {% for user in users %}
+      <option value="{{ user.nickname }}" {% if user.nickname == issue.assignee %}selected{% endif %}>{{ user.nickname }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>
     Version
     <input type="text" name="version" value="{{ issue.version }}" required>
   </label>

@@ -1,15 +1,16 @@
 from flask import Blueprint, request, jsonify, render_template, url_for, flash
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
-
-from controllers.admin_controller import project_service
+from controllers.admin_controller import project_service, user_service
 from services.project_service import ProjectService
 from services.issue_service import IssueService
+from services.user_service import UserService
 from config import Config
 from typing import Dict, Any
 
 issue_bp = Blueprint('issue', __name__, url_prefix='/api/issues') # flask blueprint's route decorator
 service = IssueService(Config())
+user_service_instance = UserService(Config())
 
 
 @issue_bp.route('/new', methods = ['GET'])
@@ -17,6 +18,7 @@ service = IssueService(Config())
 def register_issue_page():
     """Render page for Register New Issue"""
     projects = project_service.get_all_projects()
+    users = user_service_instance.get_all_users()
     return render_template('register_new_issue.html', projects = projects)
 
 
@@ -88,6 +90,7 @@ def edit_issue_page(issue_id:int):
         flash('Issue cannot be found')
         return redirect(url_for('issue.issue_list_page'))
     projects = project_service.get_all_projects()
+    users = user_service_instance.get_all_users()
     return render_template('edit_issue.html', issue = issue, projects = projects)
 
 

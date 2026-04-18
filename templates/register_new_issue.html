@@ -40,6 +40,15 @@
     </select>
   </label>
   <label>
+    Assignee
+    <select name = "assignee">
+      <option value="">Unassigned</option>
+      {% for user in users %}
+      <option value="{{ user.nickname }}">{{ user.nickname }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
     Version
     <input type="text" name="version" placeholder="Version" required>
   </label>

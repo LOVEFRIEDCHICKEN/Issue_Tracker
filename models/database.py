@@ -15,7 +15,8 @@ class Issue:
     fatality: str = ""
     version: str = ""
     issue_status: str = "open"
-    reporter: str = "anonymous"
+    reporter: str = ""
+    assignee: str = ""
     log_date: Optional[datetime] = None # date will be automatically logged
     update_date: Optional[datetime] = None # same above
 
